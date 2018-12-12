@@ -1,0 +1,67 @@
+body {
+	padding-top: 70px;
+}
+.navbar-default{
+	border-radius:0px;
+	border:none;
+	border-bottom:1px solid LightBlue;
+	background:transparent;
+}
+.navbar-brand{
+	font-size:28px;
+}
+footer{
+	border-top:1px solid LightBlue;
+	padding:20px;
+	min-height:50px;
+}
+.left_content{
+	min-height:480px;
+}
+.upload_area, .newest_images, .stats, .popular_images, .latest_comments{
+	border:1px solid LightBlue;
+	border-radius:3px;
+	margin-bottom:10px;
+	padding:10px;
+	padding-top:0px;
+}
+.slider_area{
+	border:1px solid LightBlue;
+	border-radius:3px;
+	margin-bottom:10px;
+	padding:10px;
+	padding-top:0px;
+	height:370px;
+	width:100%;
+}
+.carousel-inner{
+	height:320px;
+}
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  display: block;
+  max-width: 100%;
+  height: 320px !important;
+}
+h4{
+	border-bottom:1px solid LightBlue;
+	padding:5px;
+	margin-top:0px;
+}
+aside{
+	min-height:480px;
+}
+.badge{
+	background-color:#ff5555;
+}
+form{
+	position:relative;
+}
+#loginError{
+	position:absolute;
+	right:25%;
+	top:110%;
+}
+.login{
+	margin-left:50px;
+}

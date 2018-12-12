@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Collab</title>
+
+    <!-- Bootstrap -->
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/public/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/public/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/logged">Collab</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+      	<li><a href="/profile"><b id='user' data-id={{user._id}}>{{user.name}}</b><span id="show"></span></a></li>
+		{{#if new}}
+			<li class="dropdown"><a href="/logged" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-image fa-lg"><span class="badge">{{new}}</span></i></a>
+		        <ul class="dropdown-menu">
+		        {{#if noviews}}
+		        	{{#each noviews}}
+			        	<li>
+							<a href="/image/{{uniqueId}}">
+								<img src="/public/upload/{{filename}}" class="img-thumbnail" style="height:75px; width: 100%;" />
+							</a>
+						</li>
+		            {{/each}}
+		         {{/if}}
+		        </ul>
+        	</li>
+			{{/if}}
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-sm-8 left">
+				<section class="col-md-12 upload_area">
+					<h4>{{image.title}}</h4>
+					<p>{{image.description}}</p>
+					<img src="/public/upload/{{image.filename}}" data-user_id="{{image.user_id}}" class="img-thumbnail img-responsive" style="width:100%;" >
+					<hr />
+					<div class="col-md-8">
+						<button class="btn btn-success" id="btn-like" data-id="{{image.uniqueId}}" ><i class="fa fa-heart"> Like</i></button>&nbsp;<strong class="likes-count">{{image.likes}}</strong>&nbsp; - &nbsp;<i class="fa fa-eye"></i>&nbsp;<strong>{{image.views}}</strong>&nbsp; - &nbsp; Posted:&nbsp;<em class="text-muted">{{timeago image.timestamp}}</em>
+					</div>
+					<div class="col-md-4 text-right">
+						<button class="btn btn-danger" disabled="disabled" id="btn-delete"><i class="fa fa-times"></i></button>
+					</div>
+				</section>
+				<section class="col-md-12 newest_images">
+					<h4>
+						<div class="row">
+							<div class="col-md-8">
+								<strong>Comments</strong>
+							</div>
+							<div class="col-md-4 text-right">
+								<button class="btn btn-default btn-sm" id="btn-comment"><i class="fa fa-comment-o"></i> Post Comment...</button>
+							</div>
+						</div>
+					</h4>
+					<blockquote id="post-comment">					
+						<form method="post" action="/image/{{image.uniqueId}}/comment" class="form-horizontal" role="form">
+							<div class="form-group">
+							<label for="name" class="col-md-2 col-sm-3 control-label">Name</label>
+							<div class="col-md-10 col-sm-9">
+								<span class="form-control">{{user.name}}</span>
+								<input type="hidden" class="form-control" id="name" placeholder="Enter Name" name="name" value="{{user.name}}" required>
+							</div>
+							</div>
+							<div class="form-group">
+							<label for="email" class="col-md-2 col-sm-3 control-label">Email</label>
+							<div class="col-md-10 col-sm-9">
+								<span class="form-control">{{user.email}}</span>
+								<input type="hidden" class="form-control" id="email" placeholder="Enter Email" name="email" value="{{user.email}}" required>
+							</div>
+							</div>
+							<div class="form-group">
+							<label for="comment" class="col-md-2 col-sm-3 control-label">Comment</label>
+							<div class="col-md-10 col-sm-9">
+								<textarea name="comment" class="form-control" id="comment" required>
+								</textarea>
+							</div>
+							</div>
+							<div class="form-group text-right">
+							<div class="col-sm-12">
+								<button type="submit" class="btn btn-success"><i class="fa fa-comment"></i> Post</button>
+							</div>
+							</div>
+						</form>
+					</blockquote>
+					<ul class="media-list">
+						{{#if comments}}
+							{{#each comments}}
+								<li class="media">
+									<a class="pull-left">
+										<img class="media-object img-circle" id="{{_id}}" src="http://www.gravatar.com/avatar/{{gravatar}}?s=45" />
+									</a>
+									<div class="media-body">
+										{{comment}}<br />
+										<strong class="media-heading">{{name}}</strong>
+										<small class="text-muted">{{timeago timestamp}}</small>
+									</div>
+								</li>
+							{{/each}}
+						{{else}}
+							<p class="text-muted">Comments will show up here</p>
+						{{/if}}
+					</ul>
+				</section>
+			</div>
+			<aside class="col-md-4 col-sm-4">
+				<section class="stats">
+				<div class="container-fluid">
+					<h4>Stats</h4>
+					<div class="row">
+						<div class="col-md-2 col-sm-2 col-xs-2 text-left">
+							<i class="fa fa-image fa-lg"></i>
+						</div>
+						<div class="col-md-7 col-sm-7 col-xs-7 text-left">
+							Images
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-3 text-right">
+							{{sidebar.stats.images}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2 col-sm-2 col-xs-2 text-left">
+							<i class="fa fa-eye fa-lg"></i>
+						</div>
+						<div class="col-md-7 col-sm-7 col-xs-7 text-left">
+							Views
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-3 text-right">
+							{{sidebar.stats.views}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2 col-sm-2 col-xs-2 text-left">
+							<i class="fa fa-thumbs-o-up fa-lg"></i>
+						</div>
+						<div class="col-md-7 col-sm-7 col-xs-7 text-left">
+							Likes
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-3 text-right">
+							0
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-2 col-sm-2 col-xs-2 text-left">
+							<i class="fa fa-comment-o fa-lg"></i>
+						</div>
+						<div class="col-md-7 col-sm-7 col-xs-7 text-left">
+							Comments
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-3 text-right">
+							{{sidebar.stats.comments}}
+						</div>
+					</div>
+				</div>
+				</section>
+				<section class="popular_images">
+					<h4>Popular Images</h4>
+					<div class="row">
+					{{#if sidebar.images}}
+						{{#each sidebar.images}}
+						<div class="col-md-4 col-sm-4 col-xs-4" style="margin-bottom: 5px;">
+							<a href="/image/{{uniqueId}}">
+							<img src="/public/upload/{{filename}}" class="img-thumbnail" style="height:75px; width: 100%;" />
+							</a>
+						</div>
+						{{/each}}
+					{{else}}
+						<div class="col-md-12">
+							<p class="text-muted">The Most Popular Images will be shown here.</p>
+						</div>
+					{{/if}}
+					</div>
+				</section>
+				<section class="latest_comments">
+					<h4>Latest Comments</h4>
+					<ul class="media-list">
+						{{#if sidebar.comments}}
+							{{#each sidebar.comments}}
+								<li class="media">
+									<a class="pull-left">
+										<img class="media-object" src="/public/upload/{{image.filename}}" style="height:45px; width:45px;" />
+									</a>
+									<div class="media-body">
+										{{comment}}<br />
+										<strong class="media-heading">{{name}}</strong>
+										<small class="text-muted">{{timeago timestamp}}</small>
+									</div>
+								</li>
+							{{/each}}
+						{{else}}
+							<p class="text-muted">The Latest Comments will show up here</p>
+						{{/if}}
+					</ul>
+				</section>
+			</aside>
+		</div>
+	</div>
+	<footer>
+		<div class="container">
+			<div class="col-md-12 text-center">
+				<p>&copy; Collab 2018. All Rights Reserved.</p>
+			</div>
+		</div>
+	</footer>
+
+	
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/public/js/jquery.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
+	<script src="/public/js/script.js"></script>
+  </body>
+</html>
